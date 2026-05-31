@@ -24,7 +24,7 @@ module "cache_policy" {
 }
 
 module "distribution" {
-  source = "git::https://github.com/PlatformStackPulse/tf-atom-cloudfront-distribution-aws.git?ref=main"
+  source = "git::https://github.com/PlatformStackPulse/tf-atom-cloudfront-distribution-aws.git?ref=a746ce6"
 
   context              = module.this.context
   distribution_enabled = true
