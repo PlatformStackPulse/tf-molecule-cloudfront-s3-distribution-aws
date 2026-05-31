@@ -56,3 +56,14 @@ variable "min_ttl" {
   type        = number
   default     = 0
 }
+
+variable "custom_error_responses" {
+  description = "List of custom error response configurations for SPA routing"
+  type = list(object({
+    error_code            = number
+    response_page_path    = string
+    response_code         = number
+    error_caching_min_ttl = optional(number, 10)
+  }))
+  default = []
+}

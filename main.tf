@@ -24,7 +24,7 @@ module "cache_policy" {
 }
 
 module "distribution" {
-  source = "git::https://github.com/PlatformStackPulse/tf-atom-cloudfront-distribution-aws.git?ref=d6df1a55bc3b6856dbb308cc848651776354b4ee"
+  source = "git::https://github.com/PlatformStackPulse/tf-atom-cloudfront-distribution-aws.git?ref=main"
 
   context              = module.this.context
   distribution_enabled = true
@@ -33,6 +33,8 @@ module "distribution" {
   price_class          = var.price_class
   web_acl_id           = var.web_acl_id
   acm_certificate_arn  = var.acm_certificate_arn
+
+  custom_error_responses = var.custom_error_responses
 
   origins = [{
     domain_name              = var.s3_bucket_regional_domain_name
