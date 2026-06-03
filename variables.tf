@@ -67,3 +67,12 @@ variable "custom_error_responses" {
   }))
   default = []
 }
+
+variable "function_associations" {
+  description = "List of CloudFront function associations for viewer-request/viewer-response"
+  type = list(object({
+    event_type   = string
+    function_arn = string
+  }))
+  default = []
+}

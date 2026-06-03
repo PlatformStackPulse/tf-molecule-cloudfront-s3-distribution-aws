@@ -49,6 +49,7 @@ module "distribution" {
     viewer_protocol_policy = "redirect-to-https"
     cache_policy_id        = module.cache_policy.id
     compress               = true
+    function_associations  = var.function_associations
   }
 
   depends_on = [module.oac, module.cache_policy]
