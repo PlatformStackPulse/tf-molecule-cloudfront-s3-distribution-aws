@@ -1,6 +1,15 @@
 # tf-molecule-cloudfront-s3-distribution-aws
 
-CloudFront distribution with S3 origin, OAC, and cache policy.
+Terraform molecule that provisions a private-origin CloudFront distribution in front of an S3 bucket — wiring together an Origin Access Control (OAC), a managed cache policy, and the distribution itself into a single, opinionated CDN unit.
+
+## Features
+
+- **Private S3 origin via OAC** — composes `tf-atom-cloudfront-oac-aws` with `signing_behavior = "always"` so the bucket is reachable only through CloudFront (no public S3 access).
+- **Managed cache policy** — composes `tf-atom-cloudfront-cache-policy-aws` with configurable `min_ttl` / `default_ttl` / `max_ttl`, Gzip + Brotli compression enabled, and no cookie/header/query-string forwarding.
+- **CloudFront distribution** — composes `tf-atom-cloudfront-distribution-aws` with HTTPS redirect, `GET`/`HEAD` methods, custom `aliases` (CNAMEs), ACM certificate, price class, and optional WAF Web ACL association.
+- **SPA-friendly** — `custom_error_responses` maps 403/404 back to your app entrypoint for single-page-app routing.
+- **CloudFront Functions** — attach viewer-request / viewer-response functions via `function_associations`.
+- **tf-label conventions** — consistent naming/tagging through the shared `tf-label` context; `enabled = false` short-circuits the module.
 
 ## Usage
 
@@ -12,9 +21,20 @@ module "cdn" {
   environment = "prod"
   name        = "website"
 
+  # Required
   s3_bucket_regional_domain_name = module.bucket.bucket_regional_domain_name
-  aliases                        = ["www.example.com"]
-  acm_certificate_arn            = "arn:aws:acm:us-east-1:123456789012:certificate/abc"
+
+  # Optional
+  aliases             = ["www.example.com"]
+  acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/abc"
+
+  custom_error_responses = [
+    {
+      error_code         = 403
+      response_page_path = "/index.html"
+      response_code      = 200
+    }
+  ]
 }
 ```
 
@@ -87,3 +107,23 @@ No resources.
 | <a name="output_hosted_zone_id"></a> [hosted\_zone\_id](#output\_hosted\_zone\_id) | CloudFront hosted zone ID for Route53 alias |
 | <a name="output_oac_id"></a> [oac\_id](#output\_oac\_id) | Origin Access Control ID |
 <!-- END_TF_DOCS -->
+
+## Tests
+
+Unit tests use a mock AWS provider (no real AWS calls) and run at `plan` time.
+They assert on plan-known values — the `tf-label` id, input pass-throughs, and
+the `enabled` flag — rather than computed CloudFront ARNs/IDs (which are unknown
+under a mock provider).
+
+```bash
+terraform init -backend=false
+terraform test -test-directory=tests/unit
+# or:
+make test-unit
+```
+
+Integration tests (require real AWS credentials) live under `tests/integration`:
+
+```bash
+terraform test -test-directory=tests/integration
+```
