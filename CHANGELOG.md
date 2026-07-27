@@ -1,6 +1,23 @@
 # Changelog
 
 
+<a name="v1.2.1-fix-ci-docs-drift.9"></a>
+## [v1.2.1-fix-ci-docs-drift.9](https://github.com/PlatformStackPulse/Terraform-module-base-template/compare/v1.2.0...v1.2.1-fix-ci-docs-drift.9) (2026-07-27)
+
+### Documentation
+
+- regenerate README with terraform-docs v0.19.0 ([cdff3e8](https://github.com/PlatformStackPulse/Terraform-module-base-template/commit/cdff3e86d6f3579e27dfd4c80cf7b9decdcda92a))
+- **changelog:** update CHANGELOG.md [skip ci] ([aeb77e8](https://github.com/PlatformStackPulse/Terraform-module-base-template/commit/aeb77e8ae04574afab5d77f3a0a516de9ca1f320))
+
+### Features
+
+- add function_associations variable for CloudFront Function support ([27b943e](https://github.com/PlatformStackPulse/Terraform-module-base-template/commit/27b943e59f217931fe0d677253991ffd5a7d226f))
+
+### Maintenance
+
+- pin atom-cloudfront-distribution to 9126c18 (function_association support) ([0a4b5e1](https://github.com/PlatformStackPulse/Terraform-module-base-template/commit/0a4b5e1646c3e94bbfe6e5a3d633d52037603d28))
+
+
 <a name="v1.2.0"></a>
 ## [v1.2.0](https://github.com/PlatformStackPulse/Terraform-module-base-template/compare/v1.0.1-feat-implement-molecule.3...v1.2.0) (2026-05-31)
 
